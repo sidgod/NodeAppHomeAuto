@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1= title
+    form#formControl(name="control",method="post",action="/homecontrol")
+        input#inputUserName(type="text", name="pin")
+        input#inputUserEmail(type="checkbox", name="state")
+        button#btnSubmit(type="submit") submit

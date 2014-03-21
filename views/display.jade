@@ -1,0 +1,6 @@
+extends layout
+block content
+    h1= title
+    ul
+        - for (var m in pinstate)
+            li= 'Device ' + m  + ' is turned ' + pinstate[m]
