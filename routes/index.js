@@ -4,7 +4,7 @@
  */
 
 var pinmap = {};
-var gpio = require('rpi-gpio');
+var gpio = require('pi-gpio');
 
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
@@ -22,7 +22,7 @@ exports.homecontrol = function(req, res) {
   var pin = req.body.pin;
   var state = req.body.state == "on";
   console.log("Pin no = " + pin + ", Turn on ? " + state);
-  gpio.setup(pin, gpio.DIR_OUT, write(pin, state));
+  write(pin, state);
   pinmap[pin] = state == true ? 'on' : 'off';
   res.location('/display');
   res.redirect('/display');
@@ -36,8 +36,10 @@ exports.display = function(req, res) {
 };
 
 function write(pin, state) {
-    gpio.write(pin, state, function(err) {
-        if (err) throw err;
-        console.log('Written ' + state + ' to pin no ' + pin);
+    gpio.open(pin, "output", function(err) {     // Open pin 16 for output
+        var numstate = state == true ? 1 : 0;
+        gpio.write(pin, numstate, function() {          // Set pin 16 high (1)
+            gpio.close(pin);                     // Close pin 16
+        });
     });
 }
